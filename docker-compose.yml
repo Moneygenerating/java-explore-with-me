@@ -8,7 +8,6 @@ services:
       - "9090:9090"
     depends_on:
       - stats-db
-      - ewm-service
     environment:
       - DB_HOST=db
       - DB_PORT=5432
