@@ -13,6 +13,7 @@ services:
       - DB_NAME=ewm-stats
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
+      - spring.datasource.url=jdbc:postgresql://stats-db:5432/ewm-stats
 
   stats-db:
     image: postgres:14-alpine
