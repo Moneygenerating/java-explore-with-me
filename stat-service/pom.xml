@@ -8,9 +8,11 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <groupId>ru.practicum</groupId>
 
-    <artifactId>stat-service</artifactId>
+    <artifactId>ewm-stat-service</artifactId>
     <name>Stat service</name>
+    <version>0.0.1-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
