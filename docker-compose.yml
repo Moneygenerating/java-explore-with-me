@@ -7,7 +7,7 @@ services:
       - "6541:5432"
     environment:
       - POSTGRES_DB=ewm-stats
-      - POSTGRES_USER=root
+      - POSTGRES_USER=ewmUser
       - POSTGRES_PASSWORD=root
 
   ewm-db:
@@ -17,7 +17,7 @@ services:
       - "6540:5432"
     environment:
       - POSTGRES_DB=ewm-main
-      - POSTGRES_USER=root
+      - POSTGRES_USER=ewmUser
       - POSTGRES_PASSWORD=root
 
   stats-server:
@@ -28,22 +28,19 @@ services:
     depends_on:
       - stats-db
     environment:
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_NAME=ewm-stats-db
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ewm-stats
+      - dbUser=ewmUser
+      - dbPass=root
   ewm-service:
     build: ./main-service
     container_name: ewm-main-server
     ports:
       - "8080:8080"
     depends_on:
+      - stats-server
       - ewm-db
     environment:
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_NAME=ewm-main-db
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-main
+      - dbUser=ewmUser
+      - dbPass=root
+      - EWM_STATS_SERVER_URL=http://server:9090
