@@ -13,6 +13,7 @@ public abstract class AbstractController<T> {
     AbstractController(AbstractService<T> service) {
         this.service = service;
     }
+
     @PostMapping
     public T create(@Valid @RequestBody T item) {
         return service.create(item);
