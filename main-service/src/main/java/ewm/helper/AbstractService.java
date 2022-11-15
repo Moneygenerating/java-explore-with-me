@@ -1,15 +1,20 @@
 package ewm.helper;
 
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 public interface AbstractService<T> {
     T create(T item);
 
-    T update(T item);
+    T update(Long id, T item);
 
-    T get(Long id);
+    //forAll(pageable and iterate by id)
+    List<T> get(Pageable pageable, List<Long> ids);
 
-    List<T> getAll();
+    //byId - polymorphic
+    List<T> get(Long ids);
 
     void delete(Long id);
+
 }

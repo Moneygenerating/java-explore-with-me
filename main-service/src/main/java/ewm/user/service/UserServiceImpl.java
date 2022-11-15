@@ -1,11 +1,11 @@
 package ewm.user.service;
 
 import ewm.errors.ValidationException;
+import ewm.helper.AbstractService;
 import ewm.user.UserMapper;
 import ewm.user.UserRepository;
 import ewm.user.dto.UserDto;
 import ewm.user.model.User;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,15 +16,13 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
-
+public class UserServiceImpl implements AbstractService<UserDto> {
     @Autowired
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     //generate response users by id,ids,all
-    public List<UserDto> getUsers(Pageable pageable, List<Long> ids) {
+    public List<UserDto> get(Pageable pageable, List<Long> ids) {
         if (ids.size() == 0) {
             return userRepository.findAll(pageable)
                     .stream()
@@ -40,14 +38,14 @@ public class UserServiceImpl implements UserService {
 
     //polymorphic method getUsers for one user
     @Override
-    public List<UserDto> getUsers(Long ids) {
+    public List<UserDto> get(Long ids) {
         return List.of(UserMapper.toUserDto(userRepository.getReferenceById(ids)));
 
     }
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public UserDto createUser(UserDto userDto) {
+    public UserDto create(UserDto userDto) {
         if (validateUser(userDto)) {
             User user = UserMapper.toUser(userDto); //id=null исправление
             return UserMapper.toUserDto(userRepository.save(user));
@@ -57,9 +55,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public UserDto updateUser(Long userId, UserDto userDto) {
+    public UserDto update(Long userId, UserDto userDto) {
         //getUsers(byId)
-        UserDto userDtoCheck = getUsers(userId).get(0);
+        UserDto userDtoCheck = get(userId).get(0);
 
         if (userDtoCheck != null) {
             if (userDto.getName() != null) {
@@ -79,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void deleteUserById(Long userId) {
+    public void delete(Long userId) {
         userRepository.deleteById(userId);
     }
 
@@ -93,5 +91,5 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
-
 }
+
