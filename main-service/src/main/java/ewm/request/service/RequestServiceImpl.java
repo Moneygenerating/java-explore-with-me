@@ -4,7 +4,6 @@ import ewm.errors.NotFoundException;
 import ewm.errors.ValidationException;
 import ewm.event.EventRepository;
 import ewm.event.model.Event;
-import ewm.event.model.StateLifecycle;
 import ewm.request.RequestMapper;
 import ewm.request.RequestRepository;
 import ewm.request.dto.RequestDto;

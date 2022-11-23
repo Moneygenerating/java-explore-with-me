@@ -2,7 +2,6 @@ package ewm.event.controllers;
 
 
 import ewm.event.dto.EventFullDto;
-import ewm.event.model.StateLifecycle;
 import ewm.event.service.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

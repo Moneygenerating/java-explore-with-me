@@ -4,7 +4,6 @@ import ewm.category.model.Category;
 
 import ewm.user.model.User;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

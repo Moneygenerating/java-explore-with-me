@@ -1,19 +1,14 @@
 package ewm.request.controllers.auth;
 
-import ewm.event.dto.EventFullDto;
-import ewm.event.service.EventService;
-import ewm.helper.Create;
-import ewm.helper.Update;
+
 import ewm.request.dto.RequestDto;
 import ewm.request.service.RequestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -34,7 +29,7 @@ public class UserEventRequestController {
         return requestService.getAllReq(userId, eventId);
     }
 
-    @PatchMapping("/{reqId/confirm}")
+    @PatchMapping("/{reqId}/confirm")
     public RequestDto confirmRequest(@PathVariable Long userId,
                                        @PathVariable Long eventId,
                                        @PathVariable Long reqId) {
@@ -42,7 +37,7 @@ public class UserEventRequestController {
         return requestService.confirmRequest(userId, eventId, reqId);
     }
 
-    @PatchMapping("/{reqId/reject}")
+    @PatchMapping("/{reqId}/reject")
     public RequestDto rejectRequest(@PathVariable Long userId,
                                       @PathVariable Long eventId,
                                       @PathVariable Long reqId) {

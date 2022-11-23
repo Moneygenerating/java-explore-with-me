@@ -1,7 +1,5 @@
 package ewm.request.model;
 
-import ewm.event.model.StateLifecycle;
-
 public enum Status {
     PENDING,
     CONFIRMED,

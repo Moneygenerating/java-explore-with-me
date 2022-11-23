@@ -26,8 +26,8 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
             q.setParameter(4, rangeEnd);
         } else {
             q = entityManager.createQuery("SELECT e FROM Event e WHERE e.category.id IN ?6" +
-                            " AND e.annotation IN ?1 OR e.description IN ?1 AND e.paid = ?2 AND e.eventDate > ?3 "
-                    , Event.class);
+                            " AND e.annotation IN ?1 OR e.description IN ?1 AND e.paid = ?2 AND e.eventDate > ?3 ",
+                    Event.class);
             q.setParameter(1, text);
             q.setParameter(2, paid);
             q.setParameter(3, rangeStart);

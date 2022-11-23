@@ -11,9 +11,9 @@ public class RequestRepositoryImpl implements ReqRepoCustom {
     private EntityManager entityManager;
 
     @Override
-    public Integer getCountOfConfirmedRequests(Long idsEvents){
-     Query q = entityManager
-             .createQuery("SELECT count(p.event.id) FROM ParticipationRequest p WHERE p.event.id = ?1", Integer.class);
+    public Integer getCountOfConfirmedRequests(Long idsEvents) {
+        Query q = entityManager
+                .createQuery("SELECT count(p.event.id) FROM ParticipationRequest p WHERE p.event.id = ?1", Integer.class);
         q.setParameter(1, idsEvents);
         try {
             return (Integer) q.getResultList().get(0);

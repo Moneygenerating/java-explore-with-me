@@ -14,7 +14,6 @@ import ewm.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -71,13 +70,13 @@ public class EventServiceImpl implements EventService {
         }
 
         if (sort.equals("VIEWS")) {
-            return events.stream().
-                    sorted(Comparator.comparing(EventFullDto::getViews)).
-                    collect(Collectors.toList());
+            return events.stream()
+                    .sorted(Comparator.comparing(EventFullDto::getViews))
+                    .collect(Collectors.toList());
         } else {
-            return events.stream().
-                    sorted(Comparator.comparing(EventFullDto::getEventDate)).
-                    collect(Collectors.toList());
+            return events.stream()
+                    .sorted(Comparator.comparing(EventFullDto::getEventDate))
+                    .collect(Collectors.toList());
         }
     }
 
@@ -200,7 +199,7 @@ public class EventServiceImpl implements EventService {
         //get запрос про views из id из контроллера
 
         Integer confirmedRequests = requestRepository.getCountOfConfirmedRequests(event.getId());
-        dto.setConfirmedRequests(confirmedRequests);
+        dto.setCurrentParticipants(confirmedRequests);
     }
 
     private List<EventFullDto> getEventsDtoToList(List<Event> events) {

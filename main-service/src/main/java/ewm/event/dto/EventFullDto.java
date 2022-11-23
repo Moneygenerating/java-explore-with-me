@@ -1,10 +1,8 @@
 package ewm.event.dto;
 
-import ewm.category.model.Category;
 import ewm.event.model.StateLifecycle;
 import ewm.helper.Create;
 import ewm.helper.Patch;
-import ewm.helper.Update;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;

@@ -1,7 +1,6 @@
 package ewm.request.model;
 
 import ewm.event.model.Event;
-import ewm.event.model.StateLifecycle;
 import ewm.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
