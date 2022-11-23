@@ -2,4 +2,4 @@
 Template repository for ExploreWithMe project.
 
 Схема бд
-![entity relationship diagram](./images/diagram.jpg)
+![entity relationship diagram](./images/diagram.png)

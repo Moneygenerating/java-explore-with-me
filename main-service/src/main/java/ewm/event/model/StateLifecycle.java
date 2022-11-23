@@ -1,4 +1,4 @@
-package ewm.state.model;
+package ewm.event.model;
 
 //Список состояний жизненного цикла события
 public enum StateLifecycle {
