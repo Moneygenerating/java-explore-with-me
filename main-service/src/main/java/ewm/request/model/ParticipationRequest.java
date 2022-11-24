@@ -5,9 +5,11 @@ import ewm.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "participation_request")
@@ -26,4 +28,18 @@ public class ParticipationRequest {
     private User requester;
     @Column(name = "status")
     private Status status;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        ParticipationRequest participationRequest = (ParticipationRequest) o;
+        return id != null && Objects.equals(id, participationRequest.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
 }

@@ -13,8 +13,8 @@ public interface RequestRepository extends JpaRepository<ParticipationRequest, L
 
     ParticipationRequest findByRequesterAndEvent(User user, Event event);
 
-    ParticipationRequest findByIdAndRequester(Long id, User user);
+    ParticipationRequest findByIdAndRequesterId(Long id, Long requesterId);
 
-    List<ParticipationRequest> findAllByRequester(User user);
+    List<ParticipationRequest> findAllByRequesterId(Long userId);
 
 }

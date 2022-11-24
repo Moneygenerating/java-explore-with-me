@@ -30,18 +30,18 @@ public class UserEventRequestController {
     }
 
     @PatchMapping("/{reqId}/confirm")
-    public RequestDto confirmRequest(@PathVariable Long userId,
+    public RequestDto confirmRequestPrivate(@PathVariable Long userId,
                                        @PathVariable Long eventId,
                                        @PathVariable Long reqId) {
-        log.info("Запрос request PRIVATE Patch confirmRequest /{reqId/confirm}");
+        log.info("Запрос request PRIVATE Patch confirmRequestPrivate /{reqId/confirm}");
         return requestService.confirmRequest(userId, eventId, reqId);
     }
 
     @PatchMapping("/{reqId}/reject")
-    public RequestDto rejectRequest(@PathVariable Long userId,
+    public RequestDto rejectRequestPrivate(@PathVariable Long userId,
                                       @PathVariable Long eventId,
                                       @PathVariable Long reqId) {
-        log.info("Запрос request PRIVATE Patch confirmRequest /{reqId/confirm}");
+        log.info("Запрос request PRIVATE Patch rejectRequestPrivate /{reqId/confirm}");
         return requestService.rejectRequest(userId, eventId, reqId);
     }
 
