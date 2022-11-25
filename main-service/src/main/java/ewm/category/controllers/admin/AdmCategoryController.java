@@ -2,7 +2,6 @@ package ewm.category.controllers.admin;
 
 import ewm.category.dto.CategoryDto;
 import ewm.category.service.CategoryService;
-import ewm.helper.Update;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ public class AdmCategoryController {
     private final CategoryService categoryService;
 
     @PatchMapping()
-    public CategoryDto update(@Validated({Update.class}) @RequestBody CategoryDto categoryDto) {
+    public CategoryDto update(@RequestBody CategoryDto categoryDto) {
         log.info("Запрос user Update /admin/categories");
         return categoryService.update(categoryDto);
     }
