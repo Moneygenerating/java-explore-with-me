@@ -6,10 +6,11 @@ import ewm.request.model.ParticipationRequest;
 public class RequestMapper {
 
     public static RequestDto requestToDto(ParticipationRequest participationRequest) {
-        return new RequestDto(participationRequest.getId(),
+        return new RequestDto(
+                participationRequest.getId(),
                 participationRequest.getEvent().getId(),
                 participationRequest.getCreated(),
-                participationRequest.getEvent().getId(),
+                participationRequest.getRequester().getId(),
                 participationRequest.getStatus());
     }
 }

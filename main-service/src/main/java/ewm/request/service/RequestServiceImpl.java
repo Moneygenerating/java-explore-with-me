@@ -10,15 +10,14 @@ import ewm.request.RequestRepository;
 import ewm.request.dto.RequestDto;
 import ewm.request.model.ParticipationRequest;
 import ewm.request.model.Status;
+import ewm.user.UserRepository;
 import ewm.user.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,13 +28,16 @@ public class RequestServiceImpl implements RequestService {
     private RequestRepository requestRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private EventRepository eventRepository;
 
     @Override
     public List<RequestDto> getAllReq(Long userId, Long eventId) {
-        List<Event> eventsByInitiator = eventRepository.findAllById(Collections.singleton(userId));
+        List<Event> eventsByInitiator = eventRepository.findAllByInitiatorId(userId);
         List<ParticipationRequest> requests = requestRepository.findAll((root, query, criteriaBuilder) ->
-                root.get("events").in(eventsByInitiator.stream().map(Event::getId).collect(Collectors.toList())));
+                root.get("event").in(eventsByInitiator.stream().map(Event::getId).collect(Collectors.toList())));
 
         return requests.stream().map(RequestMapper::requestToDto).collect(Collectors.toList());
     }
@@ -65,6 +67,9 @@ public class RequestServiceImpl implements RequestService {
         //обновим статус запроса + увеличим акт число принятых участников
         request.setStatus(Status.CONFIRMED);
         RequestDto requestDto = RequestMapper.requestToDto(requestRepository.save(request));
+        if (event.getConfirmedRequests() == null) {
+            event.setConfirmedRequests(0);
+        }
         event.incrementParticipants();
         eventRepository.save(event);
 
@@ -72,7 +77,7 @@ public class RequestServiceImpl implements RequestService {
         if (event.getParticipantLimit() != 0 && event.getParticipantLimit() == countConfirmedReqs + 1) {
             List<ParticipationRequest> requestList = requestRepository.findAll(((root, query, criteriaBuilder) ->
                     criteriaBuilder.and(
-                            criteriaBuilder.equal(root.get("status"), Status.PENDING.ordinal()),
+                            criteriaBuilder.equal(root.get("status"), Status.PENDING),
                             criteriaBuilder.equal(root.get("event"), event.getId())
                     )));
             requestList.forEach(el -> el.setStatus(Status.REJECTED));
@@ -103,18 +108,15 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public RequestDto addRequest(Long userId, Long eventId) {
         ParticipationRequest req = new ParticipationRequest();
-        User user = new User();
-        user.setId(userId);
+        User user = userRepository.getReferenceById(userId);
+        Event eventDumb = eventRepository.getReferenceById(eventId);
+
+
         req.setRequester(user);
         req.setCreated(LocalDateTime.now());
         req.setStatus(Status.PENDING);
-
-        Event event = eventRepository.findOne(((root, query, criteriaBuilder) ->
-                criteriaBuilder.and(
-                        criteriaBuilder.equal(root.get("id"), eventId),
-                        criteriaBuilder.notEqual(root.get("initiator"), userId),
-                        criteriaBuilder.equal(root.get("state"), StateLifecycle.PUBLISHED.ordinal())
-                ))).orElseThrow(() -> new NotFoundException("Не найдено событие по которому создается запрос"));
+        req.setEvent(eventDumb);
+        Event event = getEvent(eventId, userId, false);
 
         Long countOfRequests = countOfRequests(event);
 
@@ -122,10 +124,16 @@ public class RequestServiceImpl implements RequestService {
             throw new ValidationException("Участие уже невозможно, достигнут лимит события");
         }
 
-        ParticipationRequest reqCHeck = requestRepository.findByRequesterAndEvent(user, event);
+        ParticipationRequest reqCheck = requestRepository.findByRequesterAndEvent(user, event);
 
-        if (Objects.equals(reqCHeck.getId(), userId)) {
+        if (reqCheck != null) {
             throw new ValidationException("Нельзя добавить запрос в свое же событие");
+        }
+
+        if (!event.getRequestModeration()) {
+            req.setStatus(Status.CONFIRMED);
+            event.incrementParticipants();
+            eventRepository.save(event);
         }
 
         return RequestMapper.requestToDto(requestRepository.save(req));
@@ -143,7 +151,7 @@ public class RequestServiceImpl implements RequestService {
         Event event = eventRepository.findOne(((root, query, criteriaBuilder) ->
                 criteriaBuilder.and(
                         criteriaBuilder.equal(root.get("id"), request.getEvent().getId()),
-                        criteriaBuilder.equal(root.get("state"), StateLifecycle.PUBLISHED.ordinal())
+                        criteriaBuilder.equal(root.get("state"), StateLifecycle.PUBLISHED)
                 ))).orElseThrow(() -> new NotFoundException("Не найдено событие по которому отменяется запрос"));
 
         //логика присваивания статуса и декремента
@@ -157,11 +165,21 @@ public class RequestServiceImpl implements RequestService {
         return RequestMapper.requestToDto(requestRepository.save(request));
     }
 
+    private Event getEvent(Long eventId, Long userId, Boolean initiator) {
+        return eventRepository.findOne(((root, query, criteriaBuilder) ->
+                criteriaBuilder.and(
+                        criteriaBuilder.equal(root.get("id"), eventId),
+                        (initiator) ? criteriaBuilder.equal(root.get("initiator"),
+                                userId) : criteriaBuilder.notEqual(root.get("initiator"), userId),
+                        criteriaBuilder.equal(root.get("state"), StateLifecycle.PUBLISHED)
+                ))).orElseThrow(() -> new NotFoundException("Событие не найдено"));
+    }
+
     private Long countOfRequests(Event event) {
         return requestRepository.count((root, query, criteriaBuilder) ->
                 criteriaBuilder.and(
                         criteriaBuilder.equal(root.get("event"), event.getId()),
-                        criteriaBuilder.equal(root.get("status"), Status.CONFIRMED.ordinal())
+                        criteriaBuilder.equal(root.get("status"), Status.CONFIRMED)
                 ));
     }
 }

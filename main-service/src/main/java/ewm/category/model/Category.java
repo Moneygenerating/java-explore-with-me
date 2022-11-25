@@ -25,6 +25,12 @@ public class Category {
         this.name = name;
     }
 
+    public Category(String name, Long id) {
+        this.id = id;
+        this.name = name;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

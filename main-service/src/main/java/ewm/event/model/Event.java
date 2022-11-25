@@ -45,8 +45,8 @@ public class Event {
     private LocalDateTime publishedOn;
     //@Builder.Default
     //Текущее количество принятых заявок
-    @Column(name = "current_participants")
-    private Integer currentParticipants = 0;
+    @Column(name = "confirmed_requests")
+    private Integer confirmedRequests = 0;
     @Column(name = "request_moderation", nullable = false)
     private Boolean requestModeration;
     @Enumerated(EnumType.STRING)
@@ -55,11 +55,11 @@ public class Event {
     private String title;
 
     public void incrementParticipants() {
-        currentParticipants++;
+        confirmedRequests++;
     }
 
     public void decrementParticipants() {
-        currentParticipants--;
+        confirmedRequests--;
     }
 
     @Override

@@ -37,10 +37,10 @@ public class AdminEventController {
                 Sort.by(Sort.Direction.ASC, "id"))), users, states, categories, rangeStart, rangeEnd);
     }
 
-    @PostMapping("/{eventId}")
+    @PutMapping("/{eventId}")
     public EventFullDto editEventAdmin(@PathVariable Long eventId, @RequestBody @Validated EventAdminDto eventAdminDto) {
 
-        log.info("Запрос Post editEventAdmin /admin/events/{eventId}");
+        log.info("Запрос Put editEventAdmin /admin/events/{eventId}");
 
         return eventService.saveAdmin(eventAdminDto, eventId);
     }

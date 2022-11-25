@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import ewm.event.model.StateLifecycle;
 import ewm.helper.Create;
 import ewm.helper.Patch;
+import ewm.helper.Update;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
@@ -11,11 +12,11 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
-@EventTimeValidation(start = "createdOn", end = "eventDate", groups = {Create.class})
+@RequiredArgsConstructor
+@EventTimeValidation(start = "createdOn", end = "eventDate", groups = {Create.class, Update.class})
 public class EventFullDto {
     @NotNull(groups = {Patch.class})
-    private Long eventId;
+    private Long id;
     @NotNull(groups = {Patch.class})
     private String annotation;
     @NotNull(groups = {Create.class, Patch.class})
@@ -42,7 +43,7 @@ public class EventFullDto {
     @NotNull(groups = {Create.class})
     private String title;
     private Integer views;//service stats
-    private Integer currentParticipants;
+    private Integer confirmedRequests;
 
     @Getter
     @Setter
@@ -55,16 +56,19 @@ public class EventFullDto {
 
     @Getter
     @Setter
-    @NoArgsConstructor
     @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
     public static class LocationDto {
-        Float lat;
-        Float lon;
+        private Float lat;
+        private Float lon;
     }
 
-    @Data
+    @Getter
+    @Setter
     @AllArgsConstructor
     @NoArgsConstructor
+    @ToString
     public static class CategoryDto {
         private Long id;
         private String name;
