@@ -1,5 +1,6 @@
 package ewm.event.service;
 
+import ewm.event.dto.EventAdminDto;
 import ewm.event.dto.EventFullDto;
 import org.springframework.data.domain.Pageable;
 
@@ -27,11 +28,16 @@ public interface EventService {
     //отмена события добавленного текущим пользователем
     EventFullDto pathEventCansel(Long userId, Long eventId);
 
+    //adm getAll
+    List<EventFullDto> getAllAdmin(Pageable pageable, List<Long> users, List<String> states, List<Long> categories,
+                                    String rangeStart, String rangeEnd);
+
     //adm save and upd
-    EventFullDto save(EventFullDto eventFullDto, Long id);
+    EventFullDto saveAdmin(EventAdminDto eventAdminDto, Long id);
 
     //adm publish and reject
-    EventFullDto updateEventAdm(Long id);
+    EventFullDto publishEventAdmin(Long id);
 
-    void deleteUserById(Long userId);
+    EventFullDto rejectEventAdmin(Long id);
+
 }

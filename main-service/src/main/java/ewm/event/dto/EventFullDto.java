@@ -1,5 +1,6 @@
 package ewm.event.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import ewm.event.model.StateLifecycle;
 import ewm.helper.Create;
 import ewm.helper.Patch;
@@ -19,10 +20,12 @@ public class EventFullDto {
     private String annotation;
     @NotNull(groups = {Create.class, Patch.class})
     private CategoryDto category;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdOn;
     @NotNull(groups = {Create.class, Patch.class})
     private String description;
     @NotNull(groups = {Create.class, Patch.class})
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
     private UserShortDto initiator;
     @NotNull(groups = {Create.class})
@@ -31,13 +34,14 @@ public class EventFullDto {
     private Boolean paid;
     @NotNull(groups = {Create.class})
     private Integer participantLimit;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime publishedOn;
     @NotNull(groups = {Create.class})
     private Boolean requestModeration;
     private StateLifecycle state;
     @NotNull(groups = {Create.class})
     private String title;
-    private Integer views;
+    private Integer views;//service stats
     private Integer currentParticipants;
 
     @Getter

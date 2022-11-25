@@ -42,6 +42,7 @@ public class EventController {
     public EventFullDto getByIdAndPublished(@PathVariable Long id) {
         log.info("Запрос event Get getByIdAndPublished /categories/{catId}");
         String state = "PUBLISHED";
+        //stat client hit
         return eventService.getById(id, state);
     }
 }

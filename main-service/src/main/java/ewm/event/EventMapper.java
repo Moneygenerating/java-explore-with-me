@@ -4,28 +4,30 @@ import ewm.category.model.Category;
 import ewm.event.dto.EventFullDto;
 import ewm.event.model.Event;
 import ewm.event.model.Location;
+import ewm.event.model.StateLifecycle;
 import ewm.user.model.User;
+
+import java.time.LocalDateTime;
 
 public class EventMapper {
     public static EventFullDto eventToDto(Event event) {
         return new EventFullDto(
                 event.getId(),
                 event.getAnnotation(),
-                new EventFullDto.CategoryDto(event.getCategory().getId(),
-                        event.getCategory().getName()),
+                categoryToEventNewDto(event.getCategory()),
                 event.getCreatedOn(), //set event.getCreatedOn()
                 event.getDescription(),
                 event.getEventDate(),
-                null,
-                null,
+                userToEventNewDto(event.getInitiator()),
+                locationToEventDto(new Location(event.getLat(), event.getLon())),
                 event.getPaid(),
                 event.getParticipantLimit(),
                 event.getPublishedOn(),
                 event.getRequestModeration(),
                 event.getState(),
                 event.getTitle(),
-                null, // set in service from requests
-                null  //set countConfirmedRequests in
+                null, // state
+                event.getCurrentParticipants()  //set countConfirmedRequests in
         );
     }
 
@@ -37,7 +39,7 @@ public class EventMapper {
                         eventFullDto.getCategory().getId(),
                         eventFullDto.getCategory().getName()
                 ),
-                eventFullDto.getCreatedOn(),
+                LocalDateTime.now(), //createdOn
                 eventFullDto.getDescription(),
                 eventFullDto.getEventDate(),
                 null, //set user by evenFullDto
@@ -48,7 +50,7 @@ public class EventMapper {
                 eventFullDto.getPublishedOn(),
                 eventFullDto.getCurrentParticipants(),
                 eventFullDto.getRequestModeration(),
-                eventFullDto.getState(),
+                StateLifecycle.PENDING,
                 eventFullDto.getTitle()
         );
         return event;
@@ -74,5 +76,4 @@ public class EventMapper {
                 category.getName()
         );
     }
-
 }
