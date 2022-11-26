@@ -42,11 +42,13 @@ CREATE TABLE IF NOT EXISTS compilations (
     CONSTRAINT pk_compilations PRIMARY KEY(id)
 );
 
-CREATE TABLE IF NOT EXISTS event_compilations (
-    event_id BIGINT NOT NULL,
+CREATE TABLE IF NOT EXISTS compilations_events (
     compilation_id BIGINT NOT NULL,
-    CONSTRAINT EVENT_REQ_COMPILATION FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
-    CONSTRAINT COMPILATIONS_REQ_EVENT FOREIGN KEY (compilation_id) REFERENCES compilations(id) ON DELETE CASCADE
+    events_id BIGINT NOT NULL,
+
+    CONSTRAINT EVENT_REQ_COMPILATION FOREIGN KEY (events_id) REFERENCES events(id) ON DELETE CASCADE,
+    CONSTRAINT COMPILATIONS_REQ_EVENT FOREIGN KEY (compilation_id) REFERENCES compilations(id) ON DELETE CASCADE,
+    CONSTRAINT PK_COMP_EV primary key (compilation_id, events_id)
 );
 
 CREATE TABLE IF NOT EXISTS participation_request (
