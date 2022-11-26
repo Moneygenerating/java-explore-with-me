@@ -4,6 +4,7 @@ import ewm.category.CategoryMapper;
 import ewm.category.CategoryRepository;
 import ewm.category.dto.CategoryDto;
 import ewm.category.model.Category;
+import ewm.errors.ConflictErrorException;
 import ewm.errors.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -72,7 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         if (categoryRepository.findAll().stream().map(Category::getName)
                 .collect(Collectors.toList()).contains(categoryDto.getName())) {
-            throw new ValidationException("Такая категория уже есть, задайте другую");
+            throw new ConflictErrorException("Такая категория уже есть, задайте другую");
         }
         return true;
     }

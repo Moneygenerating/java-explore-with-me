@@ -32,13 +32,16 @@ public class ErrorControllerHandler {
 
         log.error(e.getMessage());
 
-        Errors errors = Errors.makeRequest(null, reason, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.toString());
+        Errors errors = Errors.makeRequest(null, reason, e.getMessage(), HttpStatus.BAD_REQUEST.toString());
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     public ResponseEntity<?> catchConflictError(final ConflictErrorException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+
+        String reason = "Conflict error";
+        Errors errors = Errors.makeRequest(null, reason, e.getMessage(), HttpStatus.CONFLICT.toString());
+        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler
@@ -81,9 +84,9 @@ public class ErrorControllerHandler {
     public ResponseEntity<?> handleDataIntegrity(final DataIntegrityViolationException e) {
         String reason = "DataIntegrityViolationException";
         e.printStackTrace();
-        Errors errors = Errors.makeRequest(null, reason, e.getMessage(), HttpStatus.BAD_REQUEST.toString());
+        Errors errors = Errors.makeRequest(null, reason, e.getMessage(), HttpStatus.CONFLICT.toString());
 
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
     }
 
 

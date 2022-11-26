@@ -7,11 +7,13 @@ import ewm.user.UserRepository;
 import ewm.user.dto.UserDto;
 import ewm.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,9 +48,15 @@ public class UserServiceImpl implements AbstractService<UserDto> {
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public UserDto create(UserDto userDto) {
+
+
         if (validateUser(userDto)) {
-            User user = UserMapper.toUser(userDto); //id=null исправление
-            return UserMapper.toUserDto(userRepository.save(user));
+            try {
+                User user = userRepository.save(UserMapper.toUser(userDto));
+                return UserMapper.toUserDto(user);
+            } catch (DataIntegrityViolationException e) {
+                throw new DataIntegrityViolationException(Objects.requireNonNull(e.getMessage()));
+            }
         }
         return null;
     }

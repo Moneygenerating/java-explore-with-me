@@ -1,6 +1,7 @@
 package ewm.user.controllers.admin;
 
 import ewm.helper.AbstractController;
+import ewm.helper.Create;
 import ewm.helper.Update;
 import ewm.user.dto.UserDto;
 import ewm.user.service.UserServiceImpl;
@@ -31,7 +32,7 @@ public class UserController extends AbstractController<UserDto> {
     }
 
     @PostMapping
-    public UserDto create(@RequestBody UserDto user) {
+    public UserDto create(@RequestBody @Validated({Create.class}) UserDto user) {
         log.info("Запрос user Post createNewUser /admin/users");
         return userService.create(user);
     }
