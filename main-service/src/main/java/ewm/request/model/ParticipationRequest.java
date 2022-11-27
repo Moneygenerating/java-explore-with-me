@@ -26,6 +26,7 @@ public class ParticipationRequest {
     private LocalDateTime created;
     @ManyToOne(cascade = CascadeType.ALL)
     private User requester;
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
 
