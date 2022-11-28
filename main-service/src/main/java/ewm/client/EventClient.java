@@ -1,4 +1,4 @@
-package ewm.event;
+package ewm.client;
 
 public class EventClient {
 }
