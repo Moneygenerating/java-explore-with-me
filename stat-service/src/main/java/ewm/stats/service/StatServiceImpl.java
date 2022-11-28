@@ -1,9 +1,9 @@
 package ewm.stats.service;
 
+import ewm.client.dto.HitDto;
 import ewm.stats.StatMapper;
 import ewm.stats.StatRepository;
 import ewm.stats.dto.StatDto;
-import ewm.stats.dto.StatHitDto;
 import ewm.stats.model.Stat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,9 +23,9 @@ public class StatServiceImpl implements StatService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void hit(StatHitDto statHitDto) {
+    public void hit(HitDto hitDto) {
         try {
-            Stat stat = StatMapper.statsHitDtoToStats(statHitDto);
+            Stat stat = StatMapper.statsHitDtoToStats(hitDto);
             statRepository.save(stat);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);

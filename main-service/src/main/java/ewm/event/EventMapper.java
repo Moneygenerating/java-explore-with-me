@@ -28,7 +28,7 @@ public class EventMapper {
                 event.getRequestModeration(),
                 event.getState(),
                 event.getTitle(),
-                0, // state
+                0L, // state
                 event.getConfirmedRequests()  //set countConfirmedRequests in
         );
     }

@@ -1,6 +1,7 @@
 package ewm.event.service;
 
 import ewm.category.CategoryRepository;
+import ewm.client.BaseClient;
 import ewm.errors.NotFoundException;
 import ewm.errors.ValidationException;
 import ewm.event.EventMapper;
@@ -10,6 +11,7 @@ import ewm.event.model.Event;
 import ewm.event.model.StateLifecycle;
 import ewm.user.UserRepository;
 import ewm.user.model.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,11 +19,14 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 //@Transactional(readOnly = true)
+@Slf4j
 public class EventServiceImpl implements EventService {
 
     @Autowired
@@ -32,6 +37,9 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BaseClient baseClient;
 
     @Override
     public List<EventShortDto> getAllPublic(Pageable pageable, String text, List<Long> categories, Boolean paid,
@@ -62,7 +70,8 @@ public class EventServiceImpl implements EventService {
                                 )),
                 pageable);
 
-        return events.stream().map(EventMapper::eventToShortDto).collect(Collectors.toList());
+        List<EventShortDto> eventsDto = events.stream().map(EventMapper::eventToShortDto).collect(Collectors.toList());
+        return fillEventsOfViews(eventsDto);
     }
 
     @Override
@@ -71,6 +80,8 @@ public class EventServiceImpl implements EventService {
         if (event == null) {
             throw new NotFoundException("Событие с таким id не найдено");
         }
+        EventFullDto dtoEvent = EventMapper.eventToFullDto(event);
+        dtoEvent.setViews(getViewsForEvent(dtoEvent.getId()));
         return EventMapper.eventToFullDto(event);
     }
 
@@ -232,5 +243,24 @@ public class EventServiceImpl implements EventService {
         if (eventDto.getTitle() != null && !eventDto.getTitle().isEmpty()) {
             event.setTitle(eventDto.getTitle());
         }
+    }
+
+    private Long getViewsForEvent(Long eventId) {
+        log.info("Отправка запроса клиентом на /stats получение кол-ва просмотров");
+        return baseClient.getViewsForEvents(List.of(eventId)).getOrDefault(eventId, 0L);
+    }
+
+    private List<EventShortDto> fillEventsOfViews(List<EventShortDto> eventsDto) {
+        final Map<Long, Long> eventsViews;
+        if (eventsDto.size() != 0) {
+            List<Long> eventIds = eventsDto.stream().map(EventShortDto::getId).collect(Collectors.toList());
+            log.info("Отправка запроса клиентом на /stats получение кол-ва просмотров");
+            eventsViews = baseClient.getViewsForEvents(eventIds);
+        } else {
+            eventsViews = new HashMap<>();
+        }
+
+        eventsDto.forEach(e -> e.setViews(eventsViews.getOrDefault(e.getId(), 0L)));
+        return eventsDto;
     }
 }

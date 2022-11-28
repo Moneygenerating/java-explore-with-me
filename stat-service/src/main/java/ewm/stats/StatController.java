@@ -1,7 +1,7 @@
 package ewm.stats;
 
+import ewm.client.dto.HitDto;
 import ewm.stats.dto.StatDto;
-import ewm.stats.dto.StatHitDto;
 import ewm.stats.service.StatService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -20,9 +22,9 @@ public class StatController {
     private StatService statService;
 
     @PostMapping("/hit")
-    public void toHitEvent(@Valid @RequestBody StatHitDto statHitDto) {
+    public void toHitEvent(@Valid @RequestBody HitDto hitDto) {
         log.info("Запрос post toHitEvent /hit");
-        statService.hit(statHitDto);
+        statService.hit(hitDto);
     }
 
     @GetMapping("/stats")
@@ -31,6 +33,8 @@ public class StatController {
             @RequestParam String end,
             @RequestParam(required = false) List<String> uris,
             @RequestParam(required = false, defaultValue = "false") Boolean unique) {
-        return statService.viewStatistics(start, end, uris, unique);
+        String startDecoded = URLDecoder.decode(start, StandardCharsets.UTF_8);
+        String endDecoded = URLDecoder.decode(end, StandardCharsets.UTF_8);
+        return statService.viewStatistics(startDecoded, endDecoded, uris, unique);
     }
 }

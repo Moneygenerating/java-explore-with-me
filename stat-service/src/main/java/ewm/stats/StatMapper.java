@@ -1,18 +1,18 @@
 package ewm.stats;
 
-import ewm.stats.dto.StatHitDto;
+import ewm.client.dto.HitDto;
 import ewm.stats.model.Stat;
 
 import java.net.URISyntaxException;
 
 public class StatMapper {
-    public static Stat statsHitDtoToStats(StatHitDto statHitDto)  throws URISyntaxException {
+    public static Stat statsHitDtoToStats(HitDto hitDto)  throws URISyntaxException {
         return new Stat(
                 null,
-                statHitDto.getApp(),
-                statHitDto.getUri(),
-                statHitDto.getTimestamp(),
-                statHitDto.getIp()
+                hitDto.getApp(),
+                hitDto.getUri(),
+                hitDto.getTimestamp(),
+                hitDto.getIp()
         );
     }
 }

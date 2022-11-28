@@ -42,7 +42,7 @@ public class EventFullDto {
     private StateLifecycle state;
     @NotNull(groups = {Create.class})
     private String title;
-    private Integer views;//service stats
+    private Long views;//service stats
     private Integer confirmedRequests;
 
     @Getter
