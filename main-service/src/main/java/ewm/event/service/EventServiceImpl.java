@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,7 +26,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-//@Transactional(readOnly = true)
+@Transactional(readOnly = true)
 @Slf4j
 public class EventServiceImpl implements EventService {
 
@@ -95,6 +96,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public EventFullDto pathEventByIdPrivate(Long userId, EditEventDto editEventDto) {
 
         Event event = eventRepository.getReferenceById(editEventDto.getEventId());
@@ -120,6 +122,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public EventFullDto addEventPrivate(Long userId, AddEventDto addEventDto) {
         Event eventForSave = EventMapper.addDtoToEvent(addEventDto);
         //todoCheck
@@ -139,6 +142,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public EventFullDto pathEventCansel(Long userId, Long eventId) {
         Event event = eventRepository.getEventByIdAndInitiatorId(eventId, userId);
         if (event.getId() == null) {
@@ -178,6 +182,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public EventFullDto saveAdmin(EventAdminDto eventAdminDto, Long id) {
         Event event = eventRepository.getReferenceById(id);
         if (event.getId() == null) {
@@ -199,6 +204,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public EventFullDto publishEventAdmin(Long id) {
         Event event = eventRepository.getReferenceById(id);
         if (event.getId() == null) {
@@ -211,6 +217,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public EventFullDto rejectEventAdmin(Long id) {
         Event event = eventRepository.getReferenceById(id);
         if (event.getId() == null) {

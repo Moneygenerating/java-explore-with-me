@@ -1,6 +1,8 @@
 package ewm.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import ewm.event.dto.validation.EventTimeValidation;
+import ewm.helper.Create;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -10,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//@EventTimeValidation(start = "createdOn", end = "eventDate", groups = {Create.class})
+@EventTimeValidation(start = "createdOn", end = "eventDate",typeValidate = "User", groups = {Create.class})
 public class EventShortDto {
     private Long id;
     @NotBlank

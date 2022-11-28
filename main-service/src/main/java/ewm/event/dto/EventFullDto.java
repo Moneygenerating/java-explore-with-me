@@ -1,6 +1,7 @@
 package ewm.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import ewm.event.dto.validation.EventTimeValidation;
 import ewm.event.model.StateLifecycle;
 import ewm.helper.Create;
 import ewm.helper.Patch;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-@EventTimeValidation(start = "createdOn", end = "eventDate", groups = {Create.class, Update.class})
+@EventTimeValidation(start = "createdOn",typeValidate = "User", end = "eventDate", groups = {Create.class, Update.class})
 public class EventFullDto {
     @NotNull(groups = {Patch.class})
     private Long id;

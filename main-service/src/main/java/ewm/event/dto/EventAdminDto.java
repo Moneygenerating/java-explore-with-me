@@ -1,6 +1,6 @@
 package ewm.event.dto;
 
-import ewm.event.dto.validationAdmin.EventTimeValidation;
+import ewm.event.dto.validation.EventTimeValidation;
 import ewm.helper.Create;
 import lombok.*;
 

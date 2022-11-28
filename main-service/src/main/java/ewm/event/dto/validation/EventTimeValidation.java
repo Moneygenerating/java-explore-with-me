@@ -1,4 +1,4 @@
-package ewm.event.dto.validationAdmin;
+package ewm.event.dto.validation;
 
 import javax.validation.Constraint;
 import java.lang.annotation.Retention;

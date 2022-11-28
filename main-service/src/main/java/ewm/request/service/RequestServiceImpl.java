@@ -16,12 +16,15 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class RequestServiceImpl implements RequestService {
 
     @Autowired
@@ -50,6 +53,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public RequestDto confirmRequest(Long userId, Long eventId, Long reqId) {
         Event event = eventRepository.getEventByIdAndInitiatorId(eventId, userId);
         Long countConfirmedReqs = countOfRequests(event);
@@ -88,6 +92,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public RequestDto rejectRequest(Long userId, Long eventId, Long reqId) {
         Event event = eventRepository.getEventByIdAndInitiatorId(eventId, userId);
         ParticipationRequest request = requestRepository.findOne((root, q, cb) ->
@@ -106,6 +111,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public RequestDto addRequest(Long userId, Long eventId) {
         ParticipationRequest req = new ParticipationRequest();
         User user = userRepository.getReferenceById(userId);
@@ -140,6 +146,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public RequestDto cancelRequest(Long userId, Long requestId) {
 
         ParticipationRequest request = requestRepository.findByIdAndRequesterId(requestId, userId);
