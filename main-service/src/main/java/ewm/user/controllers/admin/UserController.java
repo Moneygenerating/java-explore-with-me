@@ -19,8 +19,12 @@ import java.util.List;
 @Slf4j
 @Validated
 public class UserController extends AbstractController<UserDto> {
-    @Autowired
     UserServiceImpl userService;
+
+    @Autowired
+    public UserController(UserServiceImpl userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public List<UserDto> get(@RequestParam(value = "from", required = false, defaultValue = "0")

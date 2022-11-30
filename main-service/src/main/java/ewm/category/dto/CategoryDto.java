@@ -2,13 +2,13 @@ package ewm.category.dto;
 
 import ewm.helper.Create;
 import ewm.helper.Update;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryDto {

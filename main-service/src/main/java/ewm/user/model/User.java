@@ -27,24 +27,4 @@ public class User {
         this.name = name;
         this.email = email;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
-
-        if (!id.equals(user.id)) return false;
-        if (!name.equals(user.name)) return false;
-        return email.equals(user.email);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        result = 17 * result + name.hashCode();
-        result = 3 * result + email.hashCode();
-        return result;
-    }
 }

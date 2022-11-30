@@ -3,7 +3,6 @@ package ewm.stats;
 import ewm.client.dto.HitDto;
 import ewm.stats.dto.StatDto;
 import ewm.stats.service.StatService;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +13,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
 @Slf4j
 public class StatController {
 
+    private final StatService statService;
+
     @Autowired
-    private StatService statService;
+    public StatController(StatService statService) {
+        this.statService = statService;
+    }
 
     @PostMapping("/hit")
     public void toHitEvent(@Valid @RequestBody HitDto hitDto) {

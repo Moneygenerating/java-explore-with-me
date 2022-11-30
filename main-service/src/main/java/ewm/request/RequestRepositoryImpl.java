@@ -7,8 +7,12 @@ import javax.persistence.Query;
 
 public class RequestRepositoryImpl implements ReqRepoCustom {
 
+    private final EntityManager entityManager;
+
     @Autowired
-    private EntityManager entityManager;
+    public RequestRepositoryImpl(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     public Integer getCountOfConfirmedRequests(Long idsEvents) {

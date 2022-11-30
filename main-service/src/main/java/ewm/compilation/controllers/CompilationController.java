@@ -19,8 +19,12 @@ import java.util.List;
 @Validated
 public class CompilationController {
 
-    @Autowired
     CompilationService compilationService;
+
+    @Autowired
+    public CompilationController(CompilationService compilationService) {
+        this.compilationService = compilationService;
+    }
 
     @GetMapping
     public List<CompilationDto> getAllPublic(@RequestParam(required = false) Boolean pinned,

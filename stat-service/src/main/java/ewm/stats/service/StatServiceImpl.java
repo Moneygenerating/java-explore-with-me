@@ -18,9 +18,15 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class StatServiceImpl implements StatService {
 
-    @Autowired
-    private StatRepository statRepository;
+    private final StatRepository statRepository;
 
+    @Autowired
+    public StatServiceImpl(StatRepository statRepository) {
+        this.statRepository = statRepository;
+    }
+
+    //Сохранение информации о том, что на uri конкретного сервиса был отправлен запрос пользователем.
+    // Название сервиса, uri и ip пользователя указаны в теле запроса.
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public void hit(HitDto hitDto) {
@@ -32,6 +38,7 @@ public class StatServiceImpl implements StatService {
         }
     }
 
+    //Получение статистики по посещениям
     @Override
     public List<StatDto> viewStatistics(String start, String end, List<String> uris, Boolean distinct) {
 

@@ -16,8 +16,12 @@ import java.util.List;
 @Slf4j
 @Validated
 public class RequestsPrivateController {
-    @Autowired
     RequestService requestService;
+
+    @Autowired
+    public RequestsPrivateController(RequestService requestService) {
+        this.requestService = requestService;
+    }
 
     @GetMapping()
     public List<RequestDto> getReqByUserPrivate(@PathVariable Long userId) {

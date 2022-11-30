@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.PositiveOrZero;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -30,14 +28,19 @@ import java.util.List;
 @Slf4j
 @Validated
 public class EventController {
-    @Autowired
+
     private EventService eventService;
 
-    @Autowired
     private BaseClient baseClient;
 
     @Value("${ewmservice.app.id}")
     private String ewmAppId;
+
+    @Autowired
+    public EventController(EventService eventService, BaseClient baseClient) {
+        this.eventService = eventService;
+        this.baseClient = baseClient;
+    }
 
     @GetMapping
     public List<EventShortDto> getAllEventsPublic(HttpServletRequest request,
@@ -50,8 +53,7 @@ public class EventController {
                                                   @RequestParam(required = false, defaultValue = "") String rangeStart,
                                                   @RequestParam(required = false, defaultValue = "") String rangeEnd,
                                                   @RequestParam(required = false, defaultValue = "false") Boolean onlyAvailable,
-                                                  @RequestParam(required = false, defaultValue = "ID") String sort)
-            throws URISyntaxException, IOException, InterruptedException {
+                                                  @RequestParam(required = false, defaultValue = "ID") String sort) {
 
         log.info("Запрос getAllEventsPublic getAll /events");
 

@@ -4,7 +4,9 @@ import ewm.event.dto.validation.EventTimeValidation;
 import ewm.helper.Create;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @EventTimeValidation(start = "start", end = "eventDate", typeValidate = "Admin", groups = {Create.class})//set Admin

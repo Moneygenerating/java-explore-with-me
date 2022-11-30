@@ -2,7 +2,6 @@ package ewm.category.controllers;
 
 import ewm.category.dto.CategoryDto;
 import ewm.category.service.CategoryService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -14,13 +13,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/categories")
-@RequiredArgsConstructor
 @Slf4j
 @Validated
 public class CategoryController {
 
-    @Autowired
     private final CategoryService categoryService;
+
+    @Autowired
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     @GetMapping
     public List<CategoryDto> get(@RequestParam(value = "from", required = false, defaultValue = "0")

@@ -8,25 +8,28 @@ import ewm.compilation.model.Compilation;
 import ewm.errors.NotFoundException;
 import ewm.event.EventRepository;
 import ewm.event.model.Event;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 @Transactional(readOnly = true)
 public class CompilationServiceImpl implements CompilationService {
-    @Autowired
-    private CompilationRepository compilationRepository;
+
+    private final CompilationRepository compilationRepository;
+    private final EventRepository eventRepository;
 
     @Autowired
-    private EventRepository eventRepository;
+    public CompilationServiceImpl(CompilationRepository compilationRepository, EventRepository eventRepository) {
+        this.compilationRepository = compilationRepository;
+        this.eventRepository = eventRepository;
+    }
 
     @Override
     public List<CompilationDto> getAll(Pageable pageable, Boolean pinned) {

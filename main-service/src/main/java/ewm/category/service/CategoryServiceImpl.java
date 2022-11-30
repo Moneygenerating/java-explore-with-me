@@ -17,9 +17,12 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
+    CategoryRepository categoryRepository;
 
     @Autowired
-    CategoryRepository categoryRepository;
+    public CategoryServiceImpl(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     @Override
     public List<CategoryDto> get(Pageable pageable) {
@@ -39,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto update(CategoryDto categoryDto) {
         CategoryDto catCheck = getById(categoryDto.getId());
         if (catCheck != null) {
-            if (validateCat(categoryDto)) {
+            if (validateCategory(categoryDto)) {
                 catCheck.setName(categoryDto.getName());
             }
 
@@ -59,14 +62,14 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public CategoryDto create(CategoryDto categoryDto) {
-        if (validateCat(categoryDto)) {
+        if (validateCategory(categoryDto)) {
             Category category = CategoryMapper.toCategory(categoryDto);
             return CategoryMapper.toCategoryDto(categoryRepository.save(category));
         }
         return null;
     }
 
-    private boolean validateCat(CategoryDto categoryDto) {
+    private boolean validateCategory(CategoryDto categoryDto) {
         if (categoryDto.getName() == null || categoryDto.getName().isBlank() || categoryDto.getName().isEmpty()) {
             throw new ValidationException("Отсутствует название категории.");
         }

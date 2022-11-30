@@ -19,8 +19,13 @@ import java.util.List;
 @Slf4j
 @Validated
 public class AdminEventController {
-    @Autowired
+
     EventService eventService;
+
+    @Autowired
+    public AdminEventController(EventService eventService) {
+        this.eventService = eventService;
+    }
 
     @GetMapping
     public List<EventFullDto> getAllEventsAdmin(@RequestParam(required = false) List<Long> users,

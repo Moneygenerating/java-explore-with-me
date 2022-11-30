@@ -11,7 +11,9 @@ import lombok.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @RequiredArgsConstructor
 @EventTimeValidation(start = "createdOn",typeValidate = "User", end = "eventDate", groups = {Create.class, Update.class})

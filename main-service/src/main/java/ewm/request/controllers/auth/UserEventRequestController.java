@@ -17,8 +17,12 @@ import java.util.List;
 @Slf4j
 @Validated
 public class UserEventRequestController {
-    @Autowired
     RequestService requestService;
+
+    @Autowired
+    public UserEventRequestController(RequestService requestService) {
+        this.requestService = requestService;
+    }
 
 
     @GetMapping()
@@ -31,16 +35,16 @@ public class UserEventRequestController {
 
     @PatchMapping("/{reqId}/confirm")
     public RequestDto confirmRequestPrivate(@PathVariable Long userId,
-                                       @PathVariable Long eventId,
-                                       @PathVariable Long reqId) {
+                                            @PathVariable Long eventId,
+                                            @PathVariable Long reqId) {
         log.info("Запрос request PRIVATE Patch confirmRequestPrivate /{reqId/confirm}");
         return requestService.confirmRequest(userId, eventId, reqId);
     }
 
     @PatchMapping("/{reqId}/reject")
     public RequestDto rejectRequestPrivate(@PathVariable Long userId,
-                                      @PathVariable Long eventId,
-                                      @PathVariable Long reqId) {
+                                           @PathVariable Long eventId,
+                                           @PathVariable Long reqId) {
         log.info("Запрос request PRIVATE Patch rejectRequestPrivate /{reqId/confirm}");
         return requestService.rejectRequest(userId, eventId, reqId);
     }

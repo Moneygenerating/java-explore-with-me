@@ -30,17 +30,22 @@ import java.util.stream.Collectors;
 @Slf4j
 public class EventServiceImpl implements EventService {
 
-    @Autowired
-    private EventRepository eventRepository;
+    private final EventRepository eventRepository;
+
+    private final CategoryRepository categoryRepository;
+
+    private final UserRepository userRepository;
+
+    private final BaseClient baseClient;
 
     @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private BaseClient baseClient;
+    public EventServiceImpl(EventRepository eventRepository, CategoryRepository categoryRepository,
+                            UserRepository userRepository, BaseClient baseClient) {
+        this.eventRepository = eventRepository;
+        this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
+        this.baseClient = baseClient;
+    }
 
     @Override
     public List<EventShortDto> getAllPublic(Pageable pageable, String text, List<Long> categories, Boolean paid,

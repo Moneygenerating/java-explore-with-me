@@ -2,7 +2,6 @@ package ewm.category.controllers.admin;
 
 import ewm.category.dto.CategoryDto;
 import ewm.category.service.CategoryService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -10,13 +9,16 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/admin/categories")
-@RequiredArgsConstructor
 @Slf4j
 @Validated
 public class AdmCategoryController {
 
-    @Autowired
     private final CategoryService categoryService;
+
+    @Autowired
+    public AdmCategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     @PatchMapping()
     public CategoryDto update(@RequestBody CategoryDto categoryDto) {

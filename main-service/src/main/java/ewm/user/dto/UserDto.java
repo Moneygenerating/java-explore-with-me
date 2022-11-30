@@ -1,22 +1,28 @@
 package ewm.user.dto;
 
 import ewm.helper.Create;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import ewm.helper.Update;
+import lombok.*;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
     //уникальный идентификатор пользователя
     private Long id;
     //имя или логин пользователя
-    @NotNull(groups = {Create.class})
+    @NotEmpty(groups = {Create.class, Update.class})
+    @NotNull(groups = {Create.class, Update.class})
     private String name;
-    @NotNull(groups = {Create.class})
+    @NotEmpty(groups = {Create.class, Update.class})
+    @NotNull(groups = {Create.class, Update.class})
+    @Email(groups = {Create.class, Update.class})
     private String email;
 
 }

@@ -18,8 +18,12 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class AdminCompilationController {
 
+    private CompilationService compilationService;
+
     @Autowired
-    CompilationService compilationService;
+    public AdminCompilationController(CompilationService compilationService) {
+        this.compilationService = compilationService;
+    }
 
     @PostMapping
     public CompilationDto postCompilationAdmin(@Validated(Create.class) @RequestBody NewCompilationDto newCompilationDto) {

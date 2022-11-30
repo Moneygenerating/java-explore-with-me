@@ -12,29 +12,33 @@ import ewm.request.model.ParticipationRequest;
 import ewm.request.model.Status;
 import ewm.user.UserRepository;
 import ewm.user.model.User;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 @Transactional(readOnly = true)
 public class RequestServiceImpl implements RequestService {
 
-    @Autowired
-    private RequestRepository requestRepository;
+    private final RequestRepository requestRepository;
+
+    private final UserRepository userRepository;
+
+    private final EventRepository eventRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private EventRepository eventRepository;
+    public RequestServiceImpl(RequestRepository requestRepository, UserRepository userRepository,
+                              EventRepository eventRepository) {
+        this.requestRepository = requestRepository;
+        this.userRepository = userRepository;
+        this.eventRepository = eventRepository;
+    }
 
     @Override
     public List<RequestDto> getAllReq(Long userId, Long eventId) {

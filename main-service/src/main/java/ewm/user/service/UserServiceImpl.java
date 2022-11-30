@@ -1,6 +1,5 @@
 package ewm.user.service;
 
-import ewm.errors.ValidationException;
 import ewm.helper.AbstractService;
 import ewm.user.UserMapper;
 import ewm.user.UserRepository;
@@ -19,8 +18,12 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 public class UserServiceImpl implements AbstractService<UserDto> {
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     //generate response users by id,ids,all
@@ -49,16 +52,13 @@ public class UserServiceImpl implements AbstractService<UserDto> {
     @Transactional(rollbackFor = {Exception.class})
     public UserDto create(UserDto userDto) {
 
+        try {
+            User user = userRepository.save(UserMapper.toUser(userDto));
+            return UserMapper.toUserDto(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException(Objects.requireNonNull(e.getMessage()));
 
-        if (validateUser(userDto)) {
-            try {
-                User user = userRepository.save(UserMapper.toUser(userDto));
-                return UserMapper.toUserDto(user);
-            } catch (DataIntegrityViolationException e) {
-                throw new DataIntegrityViolationException(Objects.requireNonNull(e.getMessage()));
-            }
         }
-        return null;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class UserServiceImpl implements AbstractService<UserDto> {
                 userDtoCheck.setName(userDto.getName());
             }
             if (userDto.getEmail() != null) {
-                validateUser(userDto);
+                //validateUser(userDto);
                 userDtoCheck.setEmail(userDto.getEmail());
             }
 
@@ -87,17 +87,6 @@ public class UserServiceImpl implements AbstractService<UserDto> {
     @Transactional(rollbackFor = {Exception.class})
     public void delete(Long userId) {
         userRepository.deleteById(userId);
-    }
-
-    private boolean validateUser(UserDto userDto) {
-        if (userDto.getEmail() == null || userDto.getEmail().isBlank() || userDto.getEmail().isEmpty()) {
-            throw new ValidationException("Отсутствует email");
-        }
-
-        if (!userDto.getEmail().endsWith(".com") || !userDto.getEmail().contains("@")) {
-            throw new ValidationException("Передан неверный email");
-        }
-        return true;
     }
 }
 
