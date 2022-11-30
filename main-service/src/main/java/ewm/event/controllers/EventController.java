@@ -44,9 +44,9 @@ public class EventController {
                                                   @RequestParam(value = "from", required = false, defaultValue = "0")
                                                   @PositiveOrZero int from,
                                                   @RequestParam(value = "size", required = false, defaultValue = "10") int size,
-                                                  @RequestParam("text") String text,
-                                                  @RequestParam("categories") List<Long> categories,
-                                                  @RequestParam("paid") Boolean paid,
+                                                  @RequestParam(required = false, defaultValue = "") String text,
+                                                  @RequestParam(required = false) List<Long> categories,
+                                                  @RequestParam(required = false) Boolean paid,
                                                   @RequestParam(required = false, defaultValue = "") String rangeStart,
                                                   @RequestParam(required = false, defaultValue = "") String rangeEnd,
                                                   @RequestParam(required = false, defaultValue = "false") Boolean onlyAvailable,

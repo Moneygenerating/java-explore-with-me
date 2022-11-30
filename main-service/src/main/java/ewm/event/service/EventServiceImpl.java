@@ -52,8 +52,8 @@ public class EventServiceImpl implements EventService {
         Page<Event> events = eventRepository.findAll((root, query, criteriaBuilder) ->
                         criteriaBuilder.and(
                                 criteriaBuilder.equal(root.get("state"), StateLifecycle.PUBLISHED),
-                                root.get("category").in(categories),
-                                criteriaBuilder.equal(root.get("paid"), paid),
+                                (categories != null) ? root.get("category").in(categories) : root.isNotNull(),
+                                (paid != null) ? criteriaBuilder.equal(root.get("paid"), paid) : root.isNotNull(),
                                 (!rangeStart.isEmpty() && !rangeEnd.isEmpty()) ?
                                         criteriaBuilder.and(
                                                 criteriaBuilder.greaterThan(root.get("eventDate"), LocalDateTime.parse(rangeStart, formatter)),
@@ -65,10 +65,10 @@ public class EventServiceImpl implements EventService {
                                                 criteriaBuilder.notEqual(root.get("participantLimit"), 0),
                                                 criteriaBuilder.greaterThan(root.get("participantLimit"), root.get("confirmedRequests"))
                                         )) : root.isNotNull(),
-                                criteriaBuilder.or(
+                                (!text.isBlank()) ? criteriaBuilder.or(
                                         criteriaBuilder.like(criteriaBuilder.lower(root.get("annotation")), "%" + text.toLowerCase() + "%"),
                                         criteriaBuilder.like(criteriaBuilder.lower(root.get("description")), "%" + text.toLowerCase() + "%")
-                                )),
+                                ) : root.isNotNull()),
                 pageable);
 
         List<EventShortDto> eventsDto = events.stream().map(EventMapper::eventToShortDto).collect(Collectors.toList());
