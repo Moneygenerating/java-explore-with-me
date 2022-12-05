@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message, Long>,
         JpaSpecificationExecutor<Message>  {
-    List<Message> findAllByUserId(Long creatorId);
+    List<Message> findAllByUserIdAndUserOutId(Long creatorId, Long userOutId);
 }

@@ -15,7 +15,8 @@ public class ConversationMapper {
                 messageDto.getMessage(),
                 //maybe set from body User
                 null,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                null
         );
     }
 

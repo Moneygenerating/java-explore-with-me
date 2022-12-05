@@ -22,4 +22,6 @@ public class Message {
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
     private LocalDateTime createdOn;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private User userOut;
 }

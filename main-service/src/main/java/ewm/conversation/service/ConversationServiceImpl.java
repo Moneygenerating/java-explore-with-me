@@ -70,12 +70,13 @@ public class ConversationServiceImpl implements ConversationService {
                 "Добро пожаловать в чат для обсуждения предстоящих событий! Сообщение создано автоматически." +
                         " Удачного общения!",
                 userRepository.getReferenceById(creatorId),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                conversation.getReceived()
         );
         //Сохраняем
         messageRepository.save(message);
 
-        Set<Message> messages = Set.copyOf(messageRepository.findAllByUserId(creatorId));
+        Set<Message> messages = Set.copyOf(messageRepository.findAllByUserIdAndUserOutId(creatorId, receivedId));
 
         conversation.setMessages(messages);
         conversationRepository.save(conversation);
