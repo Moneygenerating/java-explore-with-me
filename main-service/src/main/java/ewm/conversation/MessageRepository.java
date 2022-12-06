@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message, Long>,
-        JpaSpecificationExecutor<Message>  {
-    List<Message> findAllByUserIdAndUserOutId(Long creatorId, Long userOutId);
+        JpaSpecificationExecutor<Message> {
+    List<Message> findAllByConversationId(Long conversationId);
 }
+

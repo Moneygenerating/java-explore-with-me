@@ -1,6 +1,5 @@
 package ewm.conversation.model;
 
-import ewm.event.model.Event;
 import ewm.user.model.User;
 import lombok.*;
 

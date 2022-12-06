@@ -36,7 +36,7 @@ public class ConversationDto {
     @ToString
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MessageShortDto{
+    public static class MessageShortDto {
         private Long id;
         private String message;
         private String userName;

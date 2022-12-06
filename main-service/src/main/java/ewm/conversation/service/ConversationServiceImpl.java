@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
@@ -64,6 +63,10 @@ public class ConversationServiceImpl implements ConversationService {
         conversation.setCreator(userRepository.getReferenceById(creatorId));
         conversation.setReceived(userRepository.getReferenceById(receivedId));
 
+        //save
+        Conversation conversationSaved =  conversationRepository.save(conversation);
+
+
         //Создаем приветственное сообщение
         Message message = new Message(
                 null,
@@ -71,21 +74,21 @@ public class ConversationServiceImpl implements ConversationService {
                         " Удачного общения!",
                 userRepository.getReferenceById(creatorId),
                 LocalDateTime.now(),
-                conversation.getReceived()
+                conversationSaved
         );
         //Сохраняем
         messageRepository.save(message);
 
-        Set<Message> messages = Set.copyOf(messageRepository.findAllByUserIdAndUserOutId(creatorId, receivedId));
+        Set<Message> messages = new HashSet<>(Set.copyOf(messageRepository.findAllByConversationId(conversationSaved.getId())));
 
-        conversation.setMessages(messages);
-        conversationRepository.save(conversation);
+        conversationSaved.setMessages(messages);
+        conversationRepository.save(conversationSaved);
 
         return ConversationMapper.conversationToDto(conversation);
     }
 
     @Override
-    public void deleteByOwnId(Long UserId, Long convId) {
+    public void deleteByOwnId(Long userId, Long convId) {
 
     }
 

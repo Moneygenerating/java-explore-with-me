@@ -31,7 +31,7 @@ public class ConversationMapper {
                         conversation.getReceived().getId(),
                         conversation.getReceived().getName()
                 ),
-                conversation.getMessages()!= null ? conversation.getMessages().stream().map(ConversationMapper::toMessageShortDto)
+                conversation.getMessages() != null ? conversation.getMessages().stream().map(ConversationMapper::toMessageShortDto)
                         .collect(Collectors.toSet()) : null,
                 conversation.getCreatedOn()
         );

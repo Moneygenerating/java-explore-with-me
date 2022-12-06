@@ -21,7 +21,7 @@ public interface ConversationService {
     ConversationDto createConversation(Long creatorId, Long receivedId);
 
     //Удалить чат - пользователь может удалять только свой чат
-    void deleteByOwnId(Long UserId, Long convId);
+    void deleteByOwnId(Long userId, Long convId);
 
     //Написать сообщение
     void addMessageInConversationById(Long convId, Long creatorId, Long receivedId, MessageDto messageDto);

@@ -23,5 +23,5 @@ public class Message {
     private User user;
     private LocalDateTime createdOn;
     @ManyToOne(cascade = CascadeType.ALL)
-    private User userOut;
+    private Conversation conversation;
 }
