@@ -19,7 +19,7 @@ public class Message {
     private Long id;
     private String message;
     //creator of message
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     private User user;
     private LocalDateTime createdOn;
     @ManyToOne(cascade = CascadeType.ALL)

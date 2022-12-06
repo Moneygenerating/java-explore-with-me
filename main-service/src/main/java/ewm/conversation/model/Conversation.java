@@ -21,9 +21,9 @@ public class Conversation {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @ToString.Exclude
     private Set<Message> messages;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     private User creator;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     private User received;
     private LocalDateTime createdOn;
 }

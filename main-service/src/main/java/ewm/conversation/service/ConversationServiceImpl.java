@@ -40,7 +40,10 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public ConversationDto getById(Long convId) {
-        return null;
+        Conversation conversation = conversationRepository.findById(convId)
+                .orElseThrow(() -> new NotFoundException("Беседы с таким id не найдено"));
+
+        return ConversationMapper.conversationToDto(conversation);
     }
 
     @Override
