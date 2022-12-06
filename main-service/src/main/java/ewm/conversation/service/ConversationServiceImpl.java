@@ -40,20 +40,20 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public ConversationDto getById(Long convId) {
-        Conversation conversation = conversationRepository.findById(convId)
-                .orElseThrow(() -> new NotFoundException("Беседы с таким id не найдено"));
-
-        return ConversationMapper.conversationToDto(conversation);
+        return ConversationMapper.conversationToDto(checkExistConversation(convId));
     }
 
     @Override
     public void deleteById(Long convId) {
-
+        checkExistConversation(convId);
+        conversationRepository.deleteById(convId);
     }
 
     @Override
-    public List<ConversationDto> findByCreatorId(Long userId) {
-        return null;
+    public List<ConversationDto> findByCreatorId(Pageable pageable, Long userId) {
+        return conversationRepository.findAllByCreatorId(userId).stream()
+                .map(ConversationMapper::conversationToDto)
+                .collect(Collectors.toList());
     }
 
     //создать чат принудительно (опция работает при условии, что нужно задать имя чату)
@@ -163,5 +163,10 @@ public class ConversationServiceImpl implements ConversationService {
         }
 
         return conversationAnother != null;
+    }
+
+    private Conversation checkExistConversation(Long convId) {
+        return conversationRepository.findById(convId)
+                .orElseThrow(() -> new NotFoundException("Беседы с таким id не найдено"));
     }
 }

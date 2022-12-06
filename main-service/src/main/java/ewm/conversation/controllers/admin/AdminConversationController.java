@@ -33,37 +33,19 @@ public class AdminConversationController {
         return conversationService.getById(convId);
     }
 
+    @DeleteMapping("/{convId}")
+    public void deleteConversationByIdAdm(@PathVariable Long convId) {
 
-    @PostMapping("/{receivedId}")
-    public ConversationDto postConversationAuth(@PathVariable Long userId, @PathVariable Long receivedId) {
-
-        log.info("Запрос создание чата postConversationAuth /users/{userId}/conversations/{receivedId}");
-
-        return conversationService.createConversation(userId, receivedId);
+        log.info("Запрос удаление чата deleteConversationByIdAdm  /admin/conversations/{convId}");
+        conversationService.deleteById(convId);
     }
 
-    @PostMapping("/{receivedId}/message")
-    public ConversationDto postMessageAuth(@PathVariable Long userId, @PathVariable Long receivedId,
-                                           @Validated(Create.class) @RequestBody NewMessageDto newMessageDto) {
-
-        log.info("Запрос отправку сообщения в чате postMessageAuth /users/{userId}/conversations/{receivedId}/message");
-
-        return conversationService.addMessageInConversationById(userId, receivedId, newMessageDto);
-    }
-
-    @GetMapping
+    @GetMapping("/users/{userId}")
     public List<ConversationDto> getAllConversationsByUserAuth(@RequestParam(required = false, defaultValue = "0") Integer from,
                                                                @RequestParam(required = false, defaultValue = "10") Integer size,
                                                                @PathVariable Long userId) {
-        log.info("Запрос получения всех чатов пользователя getAllConversationsByUserAuth /users/{userId}/conversations");
-        return conversationService.getOwnConversations((PageRequest.of(from / size, size,
+        log.info("Запрос получения всех чатов пользователя getAllConversationsByUserAuth /admin/conversations/users/{userId}");
+        return conversationService.findByCreatorId((PageRequest.of(from / size, size,
                 Sort.by(Sort.Direction.ASC, "id"))), userId);
-    }
-
-    @DeleteMapping("/{receivedId}")
-    public void deleteConversationAuth(@PathVariable Long userId, @PathVariable Long receivedId) {
-
-        log.info("Запрос удаление чата deleteConversationAuth /users/{userId}/conversations/{receivedId}");
-        conversationService.deleteConversationByOwnId(userId, receivedId);
     }
 }

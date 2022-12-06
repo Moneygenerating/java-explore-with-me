@@ -15,7 +15,7 @@ public interface ConversationService {
     void deleteById(Long convId);
 
     //Поиск всех чатов любого пользователя Admin
-    List<ConversationDto> findByCreatorId(Long userId);
+    List<ConversationDto> findByCreatorId(Pageable pageable, Long userId);
 
     //создать чат принудительно (опция работает при условии, что нужно задать имя чату)
     //обычно чат создается автоматически, если пользователь напишет другому в личку
