@@ -18,7 +18,7 @@ public class Conversation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @ToString.Exclude
     private Set<Message> messages;
     @ManyToOne(cascade = CascadeType.ALL)

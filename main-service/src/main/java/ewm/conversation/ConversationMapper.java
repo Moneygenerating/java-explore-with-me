@@ -2,6 +2,7 @@ package ewm.conversation;
 
 import ewm.conversation.dto.ConversationDto;
 import ewm.conversation.dto.MessageDto;
+import ewm.conversation.dto.NewMessageDto;
 import ewm.conversation.model.Conversation;
 import ewm.conversation.model.Message;
 
@@ -13,6 +14,17 @@ public class ConversationMapper {
         return new Message(
                 null,
                 messageDto.getMessage(),
+                //maybe set from body User
+                null,
+                LocalDateTime.now(),
+                null
+        );
+    }
+
+    public static Message newMessageToDto(NewMessageDto newMessageDto) {
+        return new Message(
+                null,
+                newMessageDto.getMessage(),
                 //maybe set from body User
                 null,
                 LocalDateTime.now(),

@@ -1,7 +1,8 @@
 package ewm.conversation.service;
 
 import ewm.conversation.dto.ConversationDto;
-import ewm.conversation.dto.MessageDto;
+import ewm.conversation.dto.NewMessageDto;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -20,16 +21,16 @@ public interface ConversationService {
     //обычно чат создается автоматически, если пользователь напишет другому в личку
     ConversationDto createConversation(Long creatorId, Long receivedId);
 
-    //Удалить чат - пользователь может удалять только свой чат
-    void deleteByOwnId(Long userId, Long convId);
-
     //Написать сообщение
-    void addMessageInConversationById(Long convId, Long creatorId, Long receivedId, MessageDto messageDto);
+    ConversationDto addMessageInConversationById(Long creatorId, Long receivedId, NewMessageDto newMessageDto);
 
     //Получить все свои чаты
-    List<ConversationDto> getOwnConversations(Long userId);
+    List<ConversationDto> getOwnConversations(Pageable pageable,Long userId);
 
     //Получить чат с конкретным пользователем
     ConversationDto getConversationByReceivedUser(Long creatorId, Long receivedId);
+
+    //Удалить чат - пользователь может удалять только свой чат
+    void deleteConversationByOwnId(Long creatorId, Long receivedId);
 
 }

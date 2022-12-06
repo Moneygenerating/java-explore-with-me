@@ -1,7 +1,6 @@
 package ewm.conversation.dto;
 
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Getter
