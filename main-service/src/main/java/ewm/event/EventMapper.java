@@ -102,7 +102,7 @@ public class EventMapper {
 
     public static EventShortDto eventToShortDto(Event event) {
         return new EventShortDto(
-                event.getId(),
+                null,
                 event.getAnnotation(),
                 new EventShortDto.CategoryDto(event.getCategory().getId(), event.getCategory().getName()),
                 event.getConfirmedRequests(),
