@@ -38,8 +38,7 @@ CREATE TABLE IF NOT EXISTS conversations_messages (
     conversation_id BIGINT NOT NULL,
     messages_id BIGINT NOT NULL,
     CONSTRAINT CONVERSATION_MESSAGES FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE,
-    CONSTRAINT MESSAGE_BY_CONVERSATION FOREIGN KEY (messages_id) REFERENCES messages(id) ON DELETE CASCADE,
-    CONSTRAINT PK_CONV_MESSAGES primary key (conversation_id, messages_id)
+    CONSTRAINT MESSAGE_BY_CONVERSATION FOREIGN KEY (messages_id) REFERENCES messages(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS events (

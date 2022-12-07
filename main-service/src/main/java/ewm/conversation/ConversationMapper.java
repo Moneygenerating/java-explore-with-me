@@ -43,7 +43,7 @@ public class ConversationMapper {
                         conversation.getReceived().getName()
                 ),
                 conversation.getMessages() != null ? conversation.getMessages().stream().map(ConversationMapper::toMessageShortDto)
-                        .collect(Collectors.toSet()) : null,
+                        .collect(Collectors.toList()) : null,
                 conversation.getCreatedOn()
         );
     }

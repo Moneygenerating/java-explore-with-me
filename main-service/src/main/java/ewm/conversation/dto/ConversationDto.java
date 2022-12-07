@@ -5,8 +5,8 @@ import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,7 +18,7 @@ public class ConversationDto {
     @NotNull(groups = {Create.class})
     private UserShortDto creator;
     private UserShortDto received;
-    private Set<MessageShortDto> messages = new HashSet<>();
+    private List<MessageShortDto> messages = new ArrayList<>();
     private LocalDateTime createdOn;
 
     @Getter

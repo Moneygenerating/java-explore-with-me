@@ -15,12 +15,14 @@ import ewm.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class ConversationServiceImpl implements ConversationService {
 
     private final ConversationRepository conversationRepository;
@@ -43,6 +45,7 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public void deleteById(Long convId) {
         checkExistConversation(convId);
         conversationRepository.deleteById(convId);
@@ -58,6 +61,7 @@ public class ConversationServiceImpl implements ConversationService {
     //создать чат принудительно (опция работает при условии, что нужно задать имя чату)
     //обычно чат создается автоматически, если пользователь напишет другому в личку
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public ConversationDto createConversation(Long creatorId, Long receivedId) {
         //Проверка на существование диалога
         if (checkExistConversation(creatorId, receivedId)) {
@@ -86,17 +90,14 @@ public class ConversationServiceImpl implements ConversationService {
         messageRepository.save(message);
 
         //update messages in conversation
-        Set<Message> messages = new HashSet<>(
-                Set.copyOf(messageRepository.findAllByConversationId(conversationSaved.getId()))
-        );
-
-        conversationSaved.setMessages(messages);
+        conversationSaved.setMessages(messageRepository.findAllByConversationId(conversationSaved.getId()));
         conversationRepository.save(conversationSaved);
 
         return ConversationMapper.conversationToDto(conversationSaved);
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public ConversationDto addMessageInConversationById(Long creatorId, Long receivedId, NewMessageDto newMessageDto) {
         if (checkExistConversation(creatorId, receivedId)) {
             //get conversation
@@ -110,12 +111,8 @@ public class ConversationServiceImpl implements ConversationService {
             messageRepository.save(message);
 
             //get messages in conversation
-            Set<Message> messages = new HashSet<>(
-                    Set.copyOf(messageRepository.findAllByConversationId(conversationSaved.getId()))
-            );
+            List<Message> messages = messageRepository.findAllByConversationId(conversationSaved.getId());
 
-            //add message
-            messages.add(message);
             //save
             conversationSaved.setMessages(messages);
             return ConversationMapper.conversationToDto(conversationRepository.save(conversationSaved));
@@ -148,6 +145,7 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public void deleteConversationByOwnId(Long creatorId, Long receivedId) {
         Conversation conversation = conversationRepository.getByCreatorIdAndReceivedId(creatorId, receivedId);
         conversationRepository.deleteById(conversation.getId());
@@ -186,8 +184,6 @@ public class ConversationServiceImpl implements ConversationService {
 
     private boolean checkExistConversation(Long creatorId, Long receivedId) {
         Conversation conversation = conversationRepository.getByCreatorIdAndReceivedId(creatorId, receivedId);
-        //Conversation conversationAnother = conversationRepository.getByCreatorIdAndReceivedId(receivedId, creatorId);
-
         return conversation != null;
     }
 

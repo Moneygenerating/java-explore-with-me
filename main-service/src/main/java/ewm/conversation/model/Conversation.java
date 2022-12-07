@@ -5,7 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,7 +20,7 @@ public class Conversation {
     private Long id;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @ToString.Exclude
-    private Set<Message> messages;
+    private List<Message> messages;
     @ManyToOne()
     private User creator;
     @ManyToOne()
