@@ -4,6 +4,7 @@ import ewm.conversation.ConversationMapper;
 import ewm.conversation.ConversationRepository;
 import ewm.conversation.MessageRepository;
 import ewm.conversation.dto.ConversationDto;
+import ewm.conversation.dto.MessageChatDto;
 import ewm.conversation.dto.NewMessageDto;
 import ewm.conversation.model.Conversation;
 import ewm.conversation.model.Message;
@@ -16,9 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -154,15 +153,42 @@ public class ConversationServiceImpl implements ConversationService {
         conversationRepository.deleteById(conversation.getId());
     }
 
-    private boolean checkExistConversation(Long creatorId, Long receivedId) {
-        Conversation conversation = conversationRepository.getByCreatorIdAndReceivedId(creatorId, receivedId);
-        Conversation conversationAnother = conversationRepository.getByCreatorIdAndReceivedId(receivedId, creatorId);
+    @Override
+    public List<MessageChatDto> getChatByOwnerAndReceivedUsers(Long userId, Long receivedId) {
 
-        if (conversation != null) {
-            return true;
+        //find conversations from users
+        Conversation conversationOwner = conversationRepository.getByCreatorIdAndReceivedId(userId, receivedId);
+        Conversation conversationReceived = conversationRepository.getByCreatorIdAndReceivedId(receivedId, userId);
+
+        List<MessageChatDto> allMessages = new ArrayList<>();
+        //check conversations in exist
+
+        if (conversationOwner != null) {
+            allMessages.addAll(conversationOwner.getMessages().stream()
+                    .map(ConversationMapper::toMessageDto)
+                    .collect(Collectors.toList()));
         }
 
-        return conversationAnother != null;
+        if (conversationReceived != null) {
+            allMessages.addAll(conversationReceived.getMessages().stream()
+                    .map(ConversationMapper::toMessageDto)
+                    .collect(Collectors.toList()));
+        }
+
+        if (allMessages.isEmpty()) {
+            throw new NotFoundException("Исходящих сообщений у пользователей нет. Чаты пустые");
+        }
+
+        return allMessages.stream()
+                .sorted(Comparator.comparing(MessageChatDto::getCreatedOn))
+                .collect(Collectors.toList());
+    }
+
+    private boolean checkExistConversation(Long creatorId, Long receivedId) {
+        Conversation conversation = conversationRepository.getByCreatorIdAndReceivedId(creatorId, receivedId);
+        //Conversation conversationAnother = conversationRepository.getByCreatorIdAndReceivedId(receivedId, creatorId);
+
+        return conversation != null;
     }
 
     private Conversation checkExistConversation(Long convId) {

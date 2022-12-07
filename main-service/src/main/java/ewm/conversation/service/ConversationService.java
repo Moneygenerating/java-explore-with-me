@@ -1,6 +1,7 @@
 package ewm.conversation.service;
 
 import ewm.conversation.dto.ConversationDto;
+import ewm.conversation.dto.MessageChatDto;
 import ewm.conversation.dto.NewMessageDto;
 import org.springframework.data.domain.Pageable;
 
@@ -25,7 +26,7 @@ public interface ConversationService {
     ConversationDto addMessageInConversationById(Long creatorId, Long receivedId, NewMessageDto newMessageDto);
 
     //Получить все свои чаты
-    List<ConversationDto> getOwnConversations(Pageable pageable,Long userId);
+    List<ConversationDto> getOwnConversations(Pageable pageable, Long userId);
 
     //Получить чат с конкретным пользователем
     ConversationDto getConversationByReceivedUser(Long creatorId, Long receivedId);
@@ -33,4 +34,6 @@ public interface ConversationService {
     //Удалить чат - пользователь может удалять только свой чат
     void deleteConversationByOwnId(Long creatorId, Long receivedId);
 
+    //Получить чат между двумя пользователями
+    List<MessageChatDto> getChatByOwnerAndReceivedUsers(Long userId, Long receivedId);
 }

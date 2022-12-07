@@ -1,15 +1,12 @@
 package ewm.conversation.controllers.admin;
 
 import ewm.conversation.dto.ConversationDto;
-import ewm.conversation.dto.NewMessageDto;
 import ewm.conversation.service.ConversationService;
-import ewm.helper.Create;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

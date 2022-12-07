@@ -1,6 +1,7 @@
 package ewm.conversation.controllers;
 
 import ewm.conversation.dto.ConversationDto;
+import ewm.conversation.dto.MessageChatDto;
 import ewm.conversation.dto.NewMessageDto;
 import ewm.conversation.service.ConversationService;
 import ewm.helper.Create;
@@ -65,4 +66,14 @@ public class UserConversationController {
         log.info("Запрос удаление чата deleteConversationAuth /users/{userId}/conversations/{receivedId}");
         conversationService.deleteConversationByOwnId(userId, receivedId);
     }
+
+    @GetMapping("/{receivedId}/chat")
+    public List<MessageChatDto> getFullChatByOwnerAndReceivedAuth(@RequestParam(required = false, defaultValue = "0") Integer from,
+                                                                  @RequestParam(required = false, defaultValue = "10") Integer size,
+                                                                  @PathVariable Long userId, @PathVariable Long receivedId) {
+
+        log.info("Запрос получения чата getFullChatByOwnerAndReceivedAuth /users/{userId}/conversations/{receivedId}/chat");
+        return conversationService.getChatByOwnerAndReceivedUsers(userId, receivedId);
+    }
+
 }
