@@ -20,7 +20,7 @@ public class RequestRepositoryImpl implements ReqRepoCustom {
                 .createQuery("SELECT count(p.event.id) FROM ParticipationRequest p WHERE p.event.id = ?1", Integer.class);
         q.setParameter(1, idsEvents);
         try {
-            return (Integer) q.getResultList().get(0);
+            return (Integer) q.getResultList().get(1);
         } catch (Exception e) {
             return null;
         }
