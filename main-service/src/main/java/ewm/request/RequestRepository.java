@@ -3,6 +3,10 @@ package ewm.request;
 import ewm.event.model.Event;
 import ewm.request.model.ParticipationRequest;
 import ewm.user.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -17,4 +21,7 @@ public interface RequestRepository extends JpaRepository<ParticipationRequest, L
 
     List<ParticipationRequest> findAllByRequesterId(Long userId);
 
+    @Override
+    @EntityGraph(attributePaths = {"event", "requester"})
+    Page<ParticipationRequest> findAll(Specification<ParticipationRequest> spec, Pageable pageable);
 }
