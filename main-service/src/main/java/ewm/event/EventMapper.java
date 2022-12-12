@@ -78,7 +78,6 @@ public class EventMapper {
         );
     }
 
-
     public static EventFullDto.LocationDto locationToEventDto(Location location) {
         return new EventFullDto.LocationDto(
                 location.getLat(),
